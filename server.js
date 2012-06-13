@@ -18,6 +18,7 @@ var express = require('express'),
 		sys = require('util'),
 		mime = require('mime'),
 		cleanCSS = require('clean-css'),
+		httpProxy = require('http-proxy'),
 		app = module.exports = express.createServer();
 
 
@@ -25,7 +26,7 @@ var express = require('express'),
 	SETTINGS
 ============================================================================= */
 
-var port = 4000,
+var port = process.env.PORT || 3000,
 		cacheAge = 60000 * 60 * 24 * 365,
 		logs = {
 			set: false,
@@ -127,8 +128,8 @@ app.use(function(err, req, res, next){
 	YOUR ROUTES
 ============================================================================= */
 
-// Index
-app.get('/', function(req, res) {
+// Default from HTML5 Boilerplate 
+app.get('/demo', function(req, res) {
 	res.render('index', {
 		modernizr: "javascripts/libs/modernizr-2.0.6.min.js",
 		jquery: "javascripts/libs/jquery-1.7.2.min.js",
@@ -136,6 +137,18 @@ app.get('/', function(req, res) {
 		description: 'this is a description',
 		javascripts: ["javascripts/script.js"],
 		stylesheets: ["style.css"]
+	});
+});
+
+// real purpose, for now, is to proxy web request from DFL web control page
+// to the IP Power PDU. The IP Power is connected to the internet via
+// web tunnlr at ippower.dillflies.com:12375.
+
+var proxy = new httpProxy.RoutingProxy();
+app.get('/*', function(req, res) {
+	proxy.proxyRequest(req, res,  {
+		host: 'ippower.dillflies.com',
+		port: 12375
 	});
 });
 
