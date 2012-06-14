@@ -21,6 +21,7 @@ var express = require('express'),
 		httpProxy = require('http-proxy'),
     rest = require('restler'),
     rand = require('mersenne').rand,
+    less = require('less'),
 		app = module.exports = express.createServer();
 
 
@@ -50,6 +51,7 @@ app.configure(function(){
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.favicon(__dirname + '/public/favicon.ico'));
+  app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
 	app.use(app.router);
 	if(logs.set) app.use(express.logger(logs.string));
 });

@@ -18,6 +18,7 @@
     , "http-proxy": "*"
     , "restler": "*"
     , "mersenne": "*"
+    , "less": "*"
   },
   "main": "server.js",
   "keywords": ["h5eb", "html5", "express", "boilerplate", "ejs"],
