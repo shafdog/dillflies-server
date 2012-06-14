@@ -17,6 +17,7 @@
     , "clean-css": ">= 0.2.4"
     , "http-proxy": "*"
     , "restler": "*"
+    , "mersenne": "*"
   },
   "main": "server.js",
   "keywords": ["h5eb", "html5", "express", "boilerplate", "ejs"],

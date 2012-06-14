@@ -20,6 +20,7 @@ var express = require('express'),
 		cleanCSS = require('clean-css'),
 		httpProxy = require('http-proxy'),
     rest = require('restler'),
+    rand = require('mersenne').rand,
 		app = module.exports = express.createServer();
 
 
@@ -187,6 +188,14 @@ app.get('/lights', function(req, res) {
 
 app.get('/lights/:port/:state', function(req, res) {
   console.log('/lights/:port/:state');
+  if(req.params.port === 'x') {
+    req.params.port = rand(4) + 1;
+    console.log("req.params.port = (random) " + String(req.params.port));
+  }
+  if(req.params.state === 'x') {
+    req.params.state = rand(2); 
+    console.log("req.params.state = (random) " + String(req.params.state));
+  }
   query = "P6"+ req.params.port + "=" + req.params.state;
   url = 'http://web1.tunnlr.com:12375/Set.cmd?CMD=SetPower+' + query;
   console.log(url);
