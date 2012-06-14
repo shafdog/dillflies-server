@@ -22,6 +22,7 @@ var express = require('express'),
     rest = require('restler'),
     rand = require('mersenne').rand,
     less = require('less'),
+    lessMiddleware = require('less-middleware'),
 		app = module.exports = express.createServer();
 
 
@@ -51,8 +52,11 @@ app.configure(function(){
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.favicon(__dirname + '/public/favicon.ico'));
-  app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
-	app.use(app.router);
+  app.use(lessMiddleware({
+        src: __dirname + '/public',
+        compress: true
+    }));	
+  app.use(app.router);
 	if(logs.set) app.use(express.logger(logs.string));
 });
 
@@ -144,6 +148,17 @@ app.get('/demo', function(req, res) {
 	});
 });
 
+app.get('/', function(req, res) {
+  res.render('lights', {
+		modernizr: "javascripts/libs/modernizr-2.0.6.min.js",
+		jquery: "javascripts/libs/jquery-1.7.2.min.js",
+		title: 'this is a title',
+		description: 'this is a description',
+		javascripts: ["javascripts/script.js", "javascripts/lights.js"],
+		stylesheets: ["style.css"]
+	});
+});
+
 app.get('/mu-*', function(req, res) {
   console.log('blitz.io validation');
   res.send('42');
@@ -222,9 +237,10 @@ app.get('/lights/:port/:state', function(req, res) {
 	});
 });
 
-// real purpose, for now, is to proxy web request from DFL web control page
-// to the IP Power PDU. The IP Power is connected to the internet via
-// web tunnlr at ippower.dillflies.com:12375.
+
+/*===========================================================================
+  UNUSED - AJAX PROXY
+============================================================================= */
 var proxy = new httpProxy.RoutingProxy();
 app.get('/ippower', function(req, res) {
 	proxy.proxyRequest(req, res,  {

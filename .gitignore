@@ -2,4 +2,6 @@
 node_modules/
 *.log
 .monitor
+public/stylesheets/bootstrap.css
+public/stylesheets/style.css
 

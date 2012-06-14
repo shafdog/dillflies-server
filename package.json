@@ -19,6 +19,7 @@
     , "restler": "*"
     , "mersenne": "*"
     , "less": "*"
+    , "less-middleware": "*"
   },
   "main": "server.js",
   "keywords": ["h5eb", "html5", "express", "boilerplate", "ejs"],
