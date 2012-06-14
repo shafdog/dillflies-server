@@ -19,6 +19,7 @@ var express = require('express'),
 		mime = require('mime'),
 		cleanCSS = require('clean-css'),
 		httpProxy = require('http-proxy'),
+    rest = require('restler'),
 		app = module.exports = express.createServer();
 
 
@@ -140,12 +141,83 @@ app.get('/demo', function(req, res) {
 	});
 });
 
+/*===========================================================================
+	API.DILLFLIES.COM ROUTES
+============================================================================= */
+
+app.get('/lights', function(req, res) {
+  console.log('/lights');
+  rest.get('http://web1.tunnlr.com:12375/Set.cmd', {
+    username: 'admin',
+    password: '12345678',
+    query: {
+      CMD: 'GetPower'
+    }
+  }).on('complete', function(result, response) {
+    if (result instanceof Error) {
+      console.log('Error: ' + result.message);
+      res.send (400, "Failed to GetPower"); 
+      return;
+    } 
+    
+    console.log(result);
+    
+    var lights = null;
+    var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
+    console.log(matchResults);
+    var lightStatus = matchResults;
+    if (lightStatus && lightStatus.length > 4) {
+      var lights = {
+        port1: Boolean(Number(lightStatus[1])),
+        port2: Boolean(Number(lightStatus[2])),
+        port3: Boolean(Number(lightStatus[3])),
+        port4: Boolean(Number(lightStatus[4]))
+      }
+    }
+    console.log(lights);
+    
+		res.json(lights);
+	});
+});
+
+app.get('/lights/:port/:state', function(req, res) {
+  console.log('/lights/:port/:state');
+  query = "P6"+ req.params.port + "=" + req.params.state;
+  url = 'http://web1.tunnlr.com:12375/Set.cmd?CMD=SetPower+' + query;
+  console.log(url);
+  rest.get(url, {
+    username: 'admin',
+    password: '12345678'
+  }).on('complete', function(result, response) {
+    if (result instanceof Error) {
+      console.log('Error: ' + result.message);
+      res.send (400, "Failed to GetPower"); 
+      return;
+    } 
+    
+    console.log(result);
+    
+    var lights = null;
+    lightStatus = result.match('......p6(.)=(.).....*');
+    if (lightStatus && lightStatus.length > 4) {
+      var lights = {
+        port1: Boolean(lightStatus[1]),
+        port2: Boolean(lightStatus[2]),
+        port3: Boolean(lightStatus[3]),
+        port4: Boolean(lightStatus[4])
+      }
+    }
+    console.log(lights);
+    
+  	res.json(lights);
+	});
+});
+
 // real purpose, for now, is to proxy web request from DFL web control page
 // to the IP Power PDU. The IP Power is connected to the internet via
 // web tunnlr at ippower.dillflies.com:12375.
-
 var proxy = new httpProxy.RoutingProxy();
-app.get('/*', function(req, res) {
+app.get('/ippower', function(req, res) {
 	proxy.proxyRequest(req, res,  {
 		host: 'ippower.dillflies.com',
 		port: 12375

@@ -16,6 +16,7 @@
     , "commander": ">= 0.1.0"
     , "clean-css": ">= 0.2.4"
     , "http-proxy": "*"
+    , "restler": "*"
   },
   "main": "server.js",
   "keywords": ["h5eb", "html5", "express", "boilerplate", "ejs"],
