@@ -172,16 +172,15 @@ app.get('/lights', function(req, res) {
     var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
     console.log(matchResults);
     var lightStatus = matchResults;
-    if (lightStatus && lightStatus.length > 4) {
+    if (lightStatus && lightStatus.length > 0) {
       var lights = {
         port1: Boolean(Number(lightStatus[1])),
         port2: Boolean(Number(lightStatus[2])),
         port3: Boolean(Number(lightStatus[3])),
         port4: Boolean(Number(lightStatus[4]))
-      }
+      };
     }
     console.log(lights);
-    
 		res.json(lights);
 	});
 });
@@ -210,16 +209,10 @@ app.get('/lights/:port/:state', function(req, res) {
     } 
     
     console.log(result);
-    
     var lights = null;
     lightStatus = result.match('......p6(.)=(.).....*');
-    if (lightStatus && lightStatus.length > 4) {
-      var lights = {
-        port1: Boolean(lightStatus[1]),
-        port2: Boolean(lightStatus[2]),
-        port3: Boolean(lightStatus[3]),
-        port4: Boolean(lightStatus[4])
-      }
+    if (lightStatus && lightStatus.length > 2) {
+      lights[lightStatus[1]] = lightStatus[2]
     }
     console.log(lights);
     
