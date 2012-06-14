@@ -10,7 +10,7 @@
           username: 'admin',
           password: '12345678',
           success: function(val) { 
-            console.log("getPower success"
+            console.log("getPower success");
             console.log(val);
             callback(val);
           },
@@ -52,16 +52,17 @@
         }
         for (i=1; i < 5; i++) {
           var jQuerySelector = '#light' + i;
-          if (lightStatus[i] == true)
+          if (lightStatus[i] == true) {
             $(jQuerySelector + "-on").addClass("btn-success");
             $(jQuerySelector + "-off").removeClass("btn-danger");
-          else
+          } else {
             $(jQuerySelector + "-on").removeClass("btn-success");
-            $(jQuerySelector + "-off").addClass("btn-danger");            
+            $(jQuerySelector + "-off").addClass("btn-danger"); 
+          }           
         }
-      });
+      }
       
-      // getPower(getPowerCallback);
+      getPower(getPowerCallback);
       
       $("#light1-on").click(function() {
           $("#light1-on").addClass("btn-success");

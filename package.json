@@ -1,8 +1,8 @@
 {
-  "name": "Express-EJS-Boilerplate",
-  "description": "HTML5 Express EJS Boilerplate. None of that jade or stylus business. Straight CSS and EJS templating.",
+  "name": "Dill Filies",
+  "description": "From HTML5 Express EJS Boilerplate. None of that jade or stylus business. Straight CSS and EJS templating. Bootstrap and LESS added by ShafDog.",
   "version": "0.0.1",
-  "author": "Nick Carneiro <nickc@trillworks.com>",
+  "author": "Austin and Anthony",
   "contributors": [
     {"name": "Nick Baugh", "email": "niftylettuce@gmail.com" },
     {"name": "Nick Carneiro", "email": "nickc@trillworks.com"}

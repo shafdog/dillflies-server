@@ -164,12 +164,14 @@ app.get('/mu-*', function(req, res) {
 	API.DILLFLIES.COM ROUTES
 ============================================================================= */
 
-app.get('/lights', function(req, res) {
+app.get('/lights-demo', function(req, res) {
   console.log('/lights - test only');
-  res.json(["html", Boolean(rand(1)), Boolean(rand(1)), Boolean(rand(1)), Boolean(rand(1))]);
+  values = ["html", Boolean(rand(2)), Boolean(rand(2)), Boolean(rand(2)), Boolean(rand(2))];
+  console.log(values);
+  res.json(values);
 });
 
-app.get('/lights-real', function(req, res) {
+app.get('/lights', function(req, res) {
   console.log('/lights');
   rest.get('http://web1.tunnlr.com:12375/Set.cmd', {
     username: 'admin',
@@ -189,21 +191,11 @@ app.get('/lights-real', function(req, res) {
     var lights = null;
     var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
     console.log(matchResults);
-    var lightStatus = matchResults;
-    if (lightStatus && lightStatus.length > 0) {
-      var lights = {
-        port1: Boolean(Number(lightStatus[1])),
-        port2: Boolean(Number(lightStatus[2])),
-        port3: Boolean(Number(lightStatus[3])),
-        port4: Boolean(Number(lightStatus[4]))
-      };
-    }
-    console.log(lights);
-    res.json(lights);
+    res.json(matchResults); // index [1] is port 1, index 0 is unused by use (but populated by .match())
   });
 });
 
-app.get('/lights/:port/:state', function(req, res) {
+app.get('/lights-demo/:port/:state', function(req, res) {
   result = '<html>p61=1</html>'
   lightStatus = result.match('.......[6](.)=(.).....*');
   console.log(lightStatus);
