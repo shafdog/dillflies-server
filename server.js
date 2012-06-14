@@ -141,6 +141,11 @@ app.get('/demo', function(req, res) {
 	});
 });
 
+app.get('/mu-*', function(req, res) {
+  console.log('blitz.io validation');
+  res.send('42');
+});
+
 /*===========================================================================
 	API.DILLFLIES.COM ROUTES
 ============================================================================= */
