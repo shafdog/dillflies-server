@@ -1,7 +1,7 @@
 
     $(document).ready(function() { 
       
-      getPower = function(callback) {
+      var getPower = function(callback) {
         console.log("getPower");   
         $.ajax({
           url: '/lights',
@@ -22,8 +22,27 @@
           }
         });
       }
+
+      var getPowerCallback = function(lightStatus) {
+        if (lightStatus == null) {
+          alert('could not get light status');
+        }
+        for (i=1; i < 5; i++) {
+          var jQuerySelector = '#light' + i;
+          if (lightStatus[i] == true) {
+            $(jQuerySelector + "-on").addClass("btn-success");
+            $(jQuerySelector + "-off").removeClass("btn-danger");
+          } else {
+            $(jQuerySelector + "-on").removeClass("btn-success");
+            $(jQuerySelector + "-off").addClass("btn-danger"); 
+          }           
+        }
+      }
       
-      setPower = function(port, state) {
+      getPower(getPowerCallback);
+
+      
+      var setPower = function(port, state) {
         console.log("setPower " + port + ' ' + state);   
         urlGet = '/lights/' + port + '/' + state;
         console.log(urlGet);
@@ -44,25 +63,18 @@
             alert(thrownError); 
           }
         });
+
+        setTimeout(function(){
+          console.log("backgrounding getPower after set")
+          getPower(getPowerCallback);
+        }, 333);
       }
       
-      getPowerCallback = function(lightStatus) {
-        if (lightStatus == null) {
-          alert('could not get light status');
-        }
-        for (i=1; i < 5; i++) {
-          var jQuerySelector = '#light' + i;
-          if (lightStatus[i] == true) {
-            $(jQuerySelector + "-on").addClass("btn-success");
-            $(jQuerySelector + "-off").removeClass("btn-danger");
-          } else {
-            $(jQuerySelector + "-on").removeClass("btn-success");
-            $(jQuerySelector + "-off").addClass("btn-danger"); 
-          }           
-        }
-      }
-      
-      getPower(getPowerCallback);
+
+      setTimeout(function(){
+          console.log("backgrounding getPower")
+          getPower(getPowerCallback);
+      }, 29*1001);
       
       $("#light1-on").click(function() {
           $("#light1-on").addClass("btn-success");
