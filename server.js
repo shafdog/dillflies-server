@@ -40,7 +40,7 @@ var port = process.env.PORT || 3000,
 app.configure(function () {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
-    express.logger();
+    app.use(express.logger());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.favicon(__dirname + '/public/favicon.ico'));
@@ -176,9 +176,11 @@ app.get('/lights', function (req, res) {
             CMD: 'GetPower'
         }
     }).on('complete', function (result, response) {
-        if (result instanceof Error) {
-            console.log('Error: ' + result.message);
-            res.send(400, "Failed to GetPower");
+        console.log('/lights callback from tunnel transversal complete')
+        console.log(result);
+       if (result instanceof Error || result == null) {
+            console.log(result);
+            res.send("GetPowerError", 400);
             return;
         }
 
@@ -188,11 +190,19 @@ app.get('/lights', function (req, res) {
             var lights = null;
             var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
             console.log(matchResults);
+            if (matchResults && matchResults.length > 4){
             res.json(matchResults); // index [1] is port 1, index 0 is unused by use (but populated by .match())
+        }
+            else
+            {
+                console.log("Failed to GetPower - Could not parse");            
+                res.send("GetPowerBadParse", 400);
+                return
+            }
             return;
         } else {
-            console.log('Error: ' + result.message);
-            res.send(400, "Failed to GetPower");
+            console.log('Failed to GetPower - No Result');
+            res.send("GetPowerNoResult", 400);
             return;
         }
     });
@@ -206,7 +216,7 @@ app.get('/lights-demo/:port/:state', function (req, res) {
 });
 
 app.get('/lights/:port/:state', function (req, res) {
-    console.log('/lights/:port/:state');
+    console.log('/lights/:port/:state - tunnel transversal complete');
     if (req.params.port === 'x') {
         req.params.port = rand(4) + 1;
         console.log("req.params.port = (random) " + String(req.params.port));
@@ -222,15 +232,34 @@ app.get('/lights/:port/:state', function (req, res) {
         username: 'admin',
         password: '12345678'
     }).on('complete', function (result, response) {
-        if (result instanceof Error) {
-            console.log('Error: ' + result.message);
-            res.send(400, "Failed to GetPower");
+        console.log('/lights/:port/:state callback from tunnel transversal complete')
+        console.log(result);
+        if (result instanceof Error || result == null) {
+            console.log("Failed to SetPower - Could not parse");            
+            res.send("SetPowerError", 400);
             return;
         }
-        console.log(result);
-        lightStatus = result.match('.......[6](.)=(.).....*');
-        console.log(lightStatus);
-        res.json(lightStatus);
+
+        if (result.length) {
+            var lights = null;
+            var matchResults = result.match('.......[6](.)=(.).....*');
+            console.log(matchResults);
+            if (matchResults && matchResults.length > 2) {
+                console.log(matchResults);
+                res.json(matchResults); // index [1] is port 1, index 0 is unused by use (but populated by .match())
+            }
+            else
+            {
+                console.log("Failed to SetPower - Could not parse");            
+                res.send("SetPowerBadParse", 400);
+                return
+            }
+            return;
+        } else {
+            console.log('Failed to SetPower - No Result');
+            res.send("SetPowerNoResult", 400);
+            return;
+        }
     });
 });
 
