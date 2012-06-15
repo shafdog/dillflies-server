@@ -177,10 +177,13 @@ app.get('/lights', function (req, res) {
         }
     }).on('error', function (result, response) {
         console.log(result);
-        res.end("GetPowerError", 400);
+        res.send("GetPowerError", 400);
     }).on('fail', function (result, response) {
         console.log(result);
-        res.end("GetPowerFail", 400);
+        res.send("GetPowerFail", 400);
+    }).on('abort', function (result, response) {
+        console.log(result);
+        res.send("GetPowerAbort", 400);
     }).on('success', function (result, response) {
         if (result.length) {
             console.log(result);
@@ -189,18 +192,22 @@ app.get('/lights', function (req, res) {
             var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
             console.log(matchResults);
             if (matchResults && matchResults.length > 4) {
-                res.json(matchResults); // index [1] is port 1, index 0 is unused by use (but populated by .match())
-                res.end();
+                 // index [1] is port 1, index 0 is unused by use (but populated by .match())
+                setTimeout(function() { 
+                  res.json(matchResults); 
+                  res.end();
+                }, 42 );
+                
                 return;
             } else {
                 console.log("Failed to GetPower - Could not parse");
-                res.end("GetPowerBadParse", 400);
+                res.send("GetPowerBadParse", 400);
                 return;
             }
             return;
         } else {
             console.log('Failed to GetPower - No Result');
-            res.end("GetPowerNoResult", 400);
+            res.send("GetPowerNoResult", 400);
             return;
         }
     }).on('complete', function (result, response) {
@@ -237,7 +244,7 @@ app.get('/lights/:port/:state', function (req, res) {
         console.log(result);
         if (result instanceof Error || result == null) {
             console.log("Failed to SetPower - Could not parse");
-            res.end("SetPowerError", 400);
+            res.send("SetPowerError", 400);
             return;
         }
 
@@ -251,13 +258,13 @@ app.get('/lights/:port/:state', function (req, res) {
                 res.end();
             } else {
                 console.log("Failed to SetPower - Could not parse");
-                res.end("SetPowerBadParse", 400);
+                res.send("SetPowerBadParse", 400);
                 return
             }
             return;
         } else {
             console.log('Failed to SetPower - No Result');
-            res.end("SetPowerNoResult", 400);
+            res.send("SetPowerNoResult", 400);
             return;
         }
     });
