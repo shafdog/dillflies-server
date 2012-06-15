@@ -175,15 +175,16 @@ app.get('/lights', function (req, res) {
         query: {
             CMD: 'GetPower'
         }
-    }).on('complete', function (result, response) {
-        console.log('/lights callback from tunnel transversal complete')
+    })
+    .on('error', function (result, response) {
         console.log(result);
-       if (result instanceof Error || result == null) {
-            console.log(result);
-            res.send("GetPowerError", 400);
-            return;
-        }
-
+        res.send("GetPowerError", 400);
+    })
+    .on('fail', function (result, response) {
+        console.log(result);
+        res.send("GetPowerFail", 400);
+    })
+    .on('success', function (result, response) {
         if (result.length) {
             console.log(result);
 
@@ -205,6 +206,10 @@ app.get('/lights', function (req, res) {
             res.send("GetPowerNoResult", 400);
             return;
         }
+    })
+    .on('complete', function (result, response) {
+        console.log('/lights complete')
+        console.log(result);        
     });
 });
 
