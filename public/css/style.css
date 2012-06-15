@@ -1,3 +1,10 @@
+@import url('h5bp.css');
+
+@import url('bootstrap.css');
+
+@import url('responsive.css');
+
+@import url('app.css');
 /* =============================================================================
    CSS App imports.
 
@@ -9,8 +16,3 @@
    h5bp's style first.
 
    ========================================================================== */
-   
-@import url('h5bp.css');
-@import url('bootstrap.css');
-@import url('responsive.css');
-@import url('app.css');

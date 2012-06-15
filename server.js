@@ -148,8 +148,8 @@ app.get('/', function(req, res) {
   res.render('lights', {
     modernizr: "javascripts/libs/modernizr-2.0.6.min.js",
     jquery: "javascripts/libs/jquery-1.7.2.min.js",
-    title: 'this is a title',
-    description: 'this is a description',
+    title: 'Dill Flies',
+    description: 'Lights',
     javascripts: ["javascripts/script.js", "javascripts/lights.js"],
     stylesheets: ["style.css"]
   });
@@ -186,12 +186,19 @@ app.get('/lights', function(req, res) {
       return;
     }
 
-    console.log(result);
+    if (result.length) {
+      console.log(result);
 
-    var lights = null;
-    var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
-    console.log(matchResults);
-    res.json(matchResults); // index [1] is port 1, index 0 is unused by use (but populated by .match())
+      var lights = null;
+      var matchResults = result.match('......p61=(.)[,]p62=(.)[,]p63=(.)[,]p64=(.).....*');
+      console.log(matchResults);
+      res.json(matchResults); // index [1] is port 1, index 0 is unused by use (but populated by .match())
+      return;
+    } else {
+      console.log('Error: ' + result.message);
+      res.send(400, "Failed to GetPower");
+      return;
+    }
   });
 });
 
