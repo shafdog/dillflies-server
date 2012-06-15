@@ -1,4 +1,5 @@
 
+    
     $(document).ready(function() { 
       
       var getPower = function(callback) {
@@ -25,24 +26,33 @@
 
       var getPowerCallback = function(lightStatus) {
         if (lightStatus == null) {
-          alert('could not get light status');
+          $("#df-error").removeClass("hide");
+          $("#df-error").html('<h3>&nbsp;&nbsp; Opps...</h3><p>You can try the eye: <button class="btn btn-warning rereadLights"><i class="icon-eye-open"></i></button></p><p><small>GetPower got null</small></p>');
         }
-        for (i=1; i < 5; i++) {
-          var jQuerySelector = '#light' + i;
-          if (lightStatus[i] == true) {
-            $(jQuerySelector + "-on").addClass("btn-success");
-            $(jQuerySelector + "-off").removeClass("btn-danger");
-          } else {
-            $(jQuerySelector + "-on").removeClass("btn-success");
-            $(jQuerySelector + "-off").addClass("btn-danger"); 
-          }           
+        if (lightStatus.length && lightStatus.length > 4) {
+          for (i=1; i < 5; i++) {
+            $("#df-error").addClass("hide");
+            var jQuerySelector = '#light' + i;
+            if (lightStatus[i] == true) {
+              $(jQuerySelector + "-on").addClass("btn-success");
+              $(jQuerySelector + "-off").removeClass("btn-danger");
+            } else {
+              $(jQuerySelector + "-on").removeClass("btn-success");
+              $(jQuerySelector + "-off").addClass("btn-danger"); 
+            }           
+          }
+        }
+        else
+        {
+            $("#df-error").removeClass("hide");
+            $("#df-error").html('<h3>&nbsp;&nbsp; Opps...</h3><p>You can try the eye: <button class="btn btn-warning rereadLights"><i class="icon-eye-open"></i></button></p><p><small>GetPower results are invalid.</small></p>');
         }
       }
       
       getPower(getPowerCallback);
 
       
-      var setPower = function(port, state) {
+      var setPower = function(port, state, callback) {
         console.log("setPower " + port + ' ' + state);   
         urlGet = '/lights/' + port + '/' + state;
         console.log(urlGet);
@@ -53,6 +63,7 @@
           username: 'admin',
           password: '12345678',
           success: function(val) { 
+            $("#df-error").addClass("hide");
             console.log("setPower success");
             console.log(val);
           },
@@ -60,22 +71,12 @@
             console.log("setPower got error");
             console.log(xhr); 
             console.log(ajaxOptions); 
-            alert(thrownError); 
+            $("#df-error").removeClass("hide");
+            $("#df-error").html('<h3>&nbsp;&nbsp; Opps...</h3><p>You can try the eye: <button class="btn btn-warning rereadLights"><i class="icon-eye-open"></i></button></p><p><small>SetPower got an error.</small></p>');
           }
         });
-
-        setTimeout(function(){
-          console.log("backgrounding getPower after set")
-          getPower(getPowerCallback);
-        }, 333);
       }
-      
-
-      setTimeout(function(){
-          console.log("backgrounding getPower")
-          getPower(getPowerCallback);
-      }, 29*1001);
-      
+            
       $("#light1-on").click(function() {
           $("#light1-on").addClass("btn-success");
           $("#light1-off").removeClass("btn-danger");
@@ -124,7 +125,8 @@
           setPower(4,0);
       });
 
-      $("#reset").click(function() {
+      $(".rereadLights").click(function() {
+          $("#df-error").addClass("hide");
           getPower(getPowerCallback);
       });
     });

@@ -21,7 +21,7 @@
     <div class="container">
       <div class="row">
         <div class="span13">
-        </p>
+        <p/>
         </div>
       </div>
       
@@ -37,10 +37,18 @@
       </div>
       
       <!-- Example row of columns -->
+
       <div class="row">
-        <div class="span3 offset1">
+        <div class="span5 offset3">
+        <div id="df-error" class="alert alert-error hide">
+          <p>Blah</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="span3">
           <h2>Cat</h2>
-           <p>Light 1</p>
           <p>
             <div class="btn-group">
               <button id="light1-on" class="btn"><i class="icon-cog"></i>&nbsp;&nbsp;&nbsp;On</button>
@@ -50,7 +58,6 @@
         </div>
         <div class="span3">
           <h2>Strobe</h2>
-           <p>Light 2</p>
           <p>
             <div class="btn-group">
               <button id="light2-on" class="btn"><i class="icon-cog"></i>&nbsp;&nbsp;&nbsp;On</button>
@@ -60,7 +67,6 @@
        </div>
         <div class="span3">
           <h2>Blues</h2>
-          <p>Light 3</p>
           <p>
             <div class="btn-group">
               <button id="light3-on" class="btn"><i class="icon-cog"></i>&nbsp;&nbsp;&nbsp;On</button>
@@ -70,7 +76,6 @@
         </div>
         <div class="span3">
           <h2>Dog</h2>
-          <p>Light 4</p>
           <p>
             <div class="btn-group">
               <button id="light4-on" class="btn"><i class="icon-cog"></i>&nbsp;&nbsp;&nbsp;On</button>
@@ -87,8 +92,21 @@
       </div>
 
       <div class="row">
-          <div class="span3 offset9">
-            <button id="reset" class="btn btn-warning"><i class="icon-eye-open"></i></button>
+        <div class="span2 offset1">
+          <h2><span style="color: teal">Ran</span><span style="color: red">dom</span></h2>
+        </div> 
+        <div class="span1">
+           <button id="random" class="btn btn-danger"><i class="icon-glass"></i></button>
+        </div>
+        <div class="span1">
+           <button id="random" class="btn btn-primary"><i class="icon-music"></i></button>
+        </div>
+        <div class="span1">
+           <button id="random" class="btn btn-inverse"><i class="icon-fire icon-white"></i></button>
+        </div>
+
+          <div class="span2 offset3">
+            <button class="btn btn-warning rereadLights"><i class="icon-eye-open"></i></button>
           </div>
         </div>
       </div>
