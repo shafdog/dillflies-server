@@ -169,7 +169,7 @@ app.get('/lights-demo', function (req, res) {
 
 app.get('/lights', function (req, res) {
     console.log('/lights');
-    rest.get('http://web1.tunnlr.com:12375/Set.cmd', {
+    rest.get('http://ippower.gotdns.org:8888/Set.cmd', {
         username: 'admin',
         password: '12345678',
         query: {
@@ -234,7 +234,7 @@ app.get('/lights/:port/:state', function (req, res) {
         console.log("req.params.state = (random) " + String(req.params.state));
     }
     query = "P6" + req.params.port + "=" + req.params.state;
-    url = 'http://web1.tunnlr.com:12375/Set.cmd?CMD=SetPower+' + query;
+    url = 'http://ippower.gotdns.org:8888/Set.cmd?CMD=SetPower+' + query;
     console.log(url);
     rest.get(url, {
         username: 'admin',
