@@ -8,7 +8,7 @@
     {"name": "Nick Carneiro", "email": "nickc@trillworks.com"}
   ],
   "dependencies": {
-      "express": ">= 2.4.6"
+      "express": "2.x"
     , "ejs": ">= 0.5.0"
     , "inspect": ">= 0.0.2"
     , "colors": ">= 0.5.0"
